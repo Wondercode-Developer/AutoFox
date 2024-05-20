@@ -1,0 +1,35 @@
+<template>
+    <lightning-card>
+        <div class="container">
+            <div class="header">
+                <div class="logo">
+                    <img src={autofoxLogoUrl} alt="Autofox Logo" />
+                </div>
+            </div>
+            <table class="autofox-table">
+                <thead>
+                    <tr>
+                        <th>Auswahl</th>
+                        <th>Reihenfolge</th>
+                        <th>Ansichten</th>
+                        <th>KI (Automatische Bearbeitung)</th>
+                        <th>Manuelle Bearbeitung</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={carModels} for:item="carModel">
+                        <tr key={carModel.carModelId}>
+                            <td><input type="checkbox" /></td>
+                            <td><input type="number" value={carModel.order} /></td>
+                            <td>
+                                <img src={carModel.ansichtenUrl} alt={carModel.name} />
+                            </td>
+                            <td><input type="checkbox" checked={carModel.automaticProcessing} /></td>
+                            <td><input type="checkbox" checked={carModel.manualProcessing} /></td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </lightning-card>
+</template>

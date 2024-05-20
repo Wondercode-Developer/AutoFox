@@ -1,0 +1,58 @@
+.container {
+    font-family: 'Arial, sans-serif';
+    margin: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    max-height: 50px;
+}
+
+.autofox-table {
+    width: 100%;
+    border-collapse: collapse; /* Ensure borders do not double up */
+}
+
+.autofox-table th,
+.autofox-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd; /* Add border to table cells for row dividers */
+}
+
+.autofox-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd; /* Thicker border for header row */
+}
+
+.autofox-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.autofox-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.autofox-table td input[type="checkbox"] {
+    transform: scale(1.5);
+}
+
+.autofox-table a {
+    color: #0070d2;
+    text-decoration: none;
+}
+
+.autofox-table a:hover {
+    text-decoration: underline;
+}
+
+.autofox-table td input[type="number"] {
+    width: 50px; 
+    height: 25px;
+}

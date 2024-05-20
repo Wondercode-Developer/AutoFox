@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata" fqn="autofoxComponent">
+    <apiVersion>58.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <!-- For Lightning Record Page -->
+        <target>lightning__RecordPage</target>
+        <!-- For Community Pages (Experience Builder Sites) -->
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+        <!-- For Salesforce App -->
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordAction</target>
+        <!-- For Utility Bar in the App -->
+        <target>lightning__UtilityBar</target>
+        <!-- For Flow Screens -->
+        <target>lightning__FlowScreen</target>
+    </targets>
+</LightningComponentBundle>
