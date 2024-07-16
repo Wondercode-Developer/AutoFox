@@ -1,0 +1,22 @@
+<template>
+    <lightning-quick-action-panel header="Generate Access Token">
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:true={message}>
+            <div class="slds-p-around_small">
+                <p>{message}</p>
+            </div>
+        </template>
+
+        <div slot="footer">
+            <lightning-button variant="neutral" label="Cancel" onclick={handleCancel}></lightning-button>
+            <template if:true={showContinueButton}>
+                <lightning-button variant="brand" label="Continue" class="slds-m-left_x-small" onclick={handleContinue}></lightning-button>
+            </template>
+        </div>
+
+    </lightning-quick-action-panel>
+</template>
