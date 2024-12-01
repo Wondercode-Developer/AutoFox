@@ -1,0 +1,18 @@
+<template>
+
+    <br/>
+    <br/>
+    <div style="text-align:right;">
+    <lightning-button variant="brand" label="Save" title="Primary action" onclick={handlesave} class="slds-m-left_x-small"></lightning-button>
+    <lightning-button variant="brand" label="Save & Email" title="Primary action" onclick={handlesaveandemail} class="slds-m-left_x-small"></lightning-button>
+    </div>
+        <br/><br/><br/>
+        <div styla="padding:15px;">
+ <iframe
+    src={fileUrl}
+    height={height}
+    width={width}
+    id='pdfFrame'
+  ></iframe>
+  </div>
+</template>

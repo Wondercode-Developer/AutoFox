@@ -1,0 +1,21 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+    </template>
+
+    <template if:false={isLoading}>
+        <br />
+        <!-- Center align the button container using flexbox with !important -->
+        <div style="display: flex !important; justify-content: center !important; align-items: center !important; padding: 20px 0 !important;">
+            <lightning-button-group>
+                <lightning-button label={label.attach} icon-name="utility:attach" onclick={handleAttach} class="slds-m-horizontal_x-small">
+                </lightning-button>
+            </lightning-button-group>
+        </div>
+        <br />
+        <!-- Iframe container -->
+        <div style="width: 100% !important; height: calc(85vh) !important; display: flex !important; justify-content: center !important; align-items: center !important; padding: 10px !important; box-sizing: border-box !important;">
+            <iframe src={pageUrl} style="width: 100% !important; height: 100% !important; border: none !important; box-sizing: border-box !important;"></iframe>
+        </div>
+    </template>
+</template>
