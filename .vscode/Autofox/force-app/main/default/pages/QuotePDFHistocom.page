@@ -1,0 +1,177 @@
+<apex:page sidebar="false" renderAs="pdf" Controller="QuotePDFController" showHeader="false" applyBodyTag="false" standardStylesheets="false">
+    
+    <head>
+        <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+        <style>
+            body {
+            max-width: 700px;
+            }
+            p {
+            margin: 0; 
+            padding: 0;
+            }
+        </style>
+    </head>
+    
+    <!-- Header Section -->
+    <div style="padding: 0px 20px; text-align: left;">
+        <div style="float: left; margin-top: 10px;">
+            <apex:image url="{!$Resource.Logo}" alt="Company Logo" style="width: 250px;" />
+        </div>
+        <div style="text-align: right; font-size: 9pt; font-family: Arial, Helvetica, sans-serif; color: #666; line-height: 1.2; float: right; margin-top: 10px;">
+            <div>{!$Label.CompanyStreet}</div>
+            <div>{!$Label.CompanyStreet2line}</div>
+            <div><strong>Tel.</strong> {!$Label.CompanyTel}</div>
+            <div><strong>Fax.</strong> {!$Label.CompanyFax}</div>
+            <div>{!$Label.CompanyEmail}</div>
+            <div>{!$Label.CompanyInfoWebsite}</div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    
+    <!-- Recipient Address Section -->
+    <div style="padding: 20px 20px 0 20px; font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 1.3;">
+        {!primaryContact.Salutation}<br/>
+        {!primaryContact.Name}<br/>
+        {!opportunityRecord.Account.Name}<br/>
+        {!opportunityRecord.Account.Company_Name_2__c}<br/>
+        {!opportunityRecord.Account.Department__c}<br/>
+        {!opportunityRecord.Account.BillingStreet}<br/>
+        {!opportunityRecord.Account.Billingpostalcode} {!opportunityRecord.Account.BillingCity}<br/>
+    </div>
+    
+    <!-- Offer Number Section -->
+    <div style="text-align: right; font-family: Arial, Helvetica, sans-serif; padding: 10px 20px; font-size: 10pt;">
+        {!$Label.QuoteNumber} {!quoteRecord.QuoteNumberCustom__c} / <span>{!formattedDate}</span>
+    </div>
+    
+    <!-- Salutation -->
+    <div style="padding: 10px 20px; font-size: 10pt; font-family: Arial, Helvetica, sans-serif;">
+        {!primaryContact.PersonalizeSalutation__c} {!primaryContact.Salutation} {!primaryContact.LastName}!
+    </div>
+    
+    <!-- Main Product Section -->
+    <div style="padding: 10px 20px; font-size: 10pt; line-height: 1.4; font-family: Arial, Helvetica, sans-serif;">
+        <p>{!$Label.EnquiryMessage}</p>
+        
+        <!-- Display List of Main Products -->
+        <div>
+            <apex:repeat value="{!mainProducts}" var="mainProduct">
+                <p style="font-weight: bold; line-height: 2; padding-left: 10px; font-family: Arial, Helvetica, sans-serif;">{!mainProduct.Product2.Name}</p>
+                <div style="display: table; width: 100%; padding: 10px 0px;">
+                    <!-- Product Image -->
+                    <apex:outputPanel rendered="{!productImageBooleanMap[mainProduct.Product2Id]}">
+                        <div style="display: table-cell; width: 15%; vertical-align: top;">
+                            <apex:image url="/sfc/servlet.shepherd/version/download/{!productImageMap[mainProduct.Product2Id].LatestPublishedVersionId}" 
+                                        alt="{!mainProduct.Product2.Name}" style="width: 120%; margin-left: -30px;" />
+                        </div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!!productImageBooleanMap[mainProduct.Product2Id]}">
+                        <div style="display: table-cell; width: 15%; vertical-align: top;">
+                            
+                        </div>
+                    </apex:outputPanel>
+                    <!-- Product Description -->
+                    <div style="display: table-cell; margin-left: -10px; vertical-align: top; text-align: justify;">
+                        <apex:outputText style="white-space: pre; font-family: Arial, Helvetica, sans-serif;" escape="false" value="{!mainProduct.Product2.QTE_ProductDescription__c}" />
+                    </div>
+                </div>
+            </apex:repeat>
+        </div>
+    </div>
+    
+    <div style="display: table; width: 100%; padding: 10px 0px;">
+        <div style="display: table-cell; width: 15%; vertical-align: top;">
+            
+        </div>
+        <div style="display: table-cell; margin-left: -10px; vertical-align: top; text-align: justify;">
+            <!-- Accessory Product Section -->
+            <table style="margin-left: -10px; width: 100%; border-collapse: collapse; font-size: 8pt; margin-top: 5px;">
+                <tr>
+                    <apex:repeat value="{!accessoryProducts}" var="item2">
+                        <tr>
+                            <td style="width: 20%; font-family: Arial, Helvetica, sans-serif;">{!item2.Product2.ProductCode}</td>
+                            <td style="width: 60%;font-family: Arial, Helvetica, sans-serif;">{!item2.Product2.Name}</td>
+                            <td style="width: 10%; text-align: center; font-family: Arial, Helvetica, sans-serif;">
+                                <apex:outputText value="{!item2.QuantityRounded__c}" 
+                                                 rendered="{!showQuantityColumn}"/>
+                            </td>
+                            <td style="width: 20%; font-family: Arial, Helvetica, sans-serif; text-align: right; white-space: nowrap;">
+                                <apex:outputField value="{!item2.Total_List_Price__c}"/></td>
+                        </tr>
+                    </apex:repeat>    
+                </tr>
+                
+                <tr style="padding: 5px 0px 5px;">
+                    <td style="border-top: .5px solid black; padding: 5px 0px 15px;"></td>
+                    <td colspan="1" style="border-top: .5px solid black; text-align: right; font-family: Arial, Helvetica, sans-serif; padding-top: 5px;">
+                        <span >{!$Label.ListPrice}</span>
+                    </td>
+                    <td style="border-top: .5px solid black; padding: 5px 0px 15px;"></td>
+                    <td style="border-top: .5px solid black; padding-top: 5px; font-family: Arial, Helvetica, sans-serif; text-align: right;">
+                        <span>
+                            <apex:outputField value="{!opportunityRecord.TotalListPrice__c}"/>    
+                        </span>
+                    </td>
+                </tr>
+                <tr style="padding: 5px 0px 5px;">
+                    <td></td>
+                    <td colspan="1" style="font-family: Arial, Helvetica, sans-serif; text-align: right;" >
+                        <span style="background-color: yellow;">{!$Label.ExchangePrice}</span>
+                    </td>
+                    <td></td>
+                    <td style=" padding-top: 5px; text-align: right;">
+                        <span style="background-color: yellow;font-family: Arial, Helvetica, sans-serif;">
+                            <apex:outputField value="{!opportunityRecord.TotalPriceAfterDiscount__c }"/>    
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <apex:outputText style="white-space: pre; font-family: Arial, Helvetica, sans-serif;" escape="false" value="{!opportunityRecord.TrainingGuarantee__c}" />
+                    </td>
+                </tr>
+                
+            </table>
+        </div>
+    </div>
+    
+    <!-- Delivery and Payment Information -->
+    <table style="width: 100%; font-family: Arial, sans-serif; font-size: 10pt; line-height: 1.4;">
+        <tr>
+            <td style="font-weight: bold; width: 30%;font-family: Arial, Helvetica, sans-serif;">{!$Label.Delivery}</td>
+            <td>{!opportunityRecord.Delivery__c}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;font-family: Arial, Helvetica, sans-serif;">{!$Label.Payment}</td>
+            <td>{!opportunityRecord.Payment__c}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;font-family: Helvetica;font-family: Arial, Helvetica, sans-serif;">{!$Label.Preise}</td>
+            <td><apex:outputText style="white-space: pre" escape="false" value="{!opportunityRecord.PricesQuoteText__c}" /></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;font-family: Arial, Helvetica, sans-serif;">{!$Label.QuoteEndDate}</td>
+            <td>{!TEXT(DAY(quoteRecord.ExpirationDate))}.{!TEXT(MONTH(quoteRecord.ExpirationDate))}.{!TEXT(YEAR(quoteRecord.ExpirationDate))}</td>
+        </tr>
+    </table>
+    
+    <!-- Contact Section -->
+    <div style="font-size: 10pt; line-height: 1.3;font-family: Arial, Helvetica, sans-serif;">
+        <p><br />{!$Label.EndNote} <br /> </p>
+        <p><br />{!$Label.Greetings} <br /> </p>
+        <p>{!loggedInUser.title} {!loggedInUser.FirstName} {!loggedInUser.LastName}<br/>
+            <a href="mailto:{!loggedInUser.Email} ">{!loggedInUser.Email}</a></p>
+    </div>
+    
+    <!-- Footer Note Section 
+    <div style="font-size: 8pt; text-align: justify; line-height: 1.4;">
+        <p><i>{!$Label.Disclaimer1}</i></p>
+        <p><i>{!$Label.Disclaimer2}</i></p>
+    </div>-->
+    
+    <!-- Footer Blue Line -->
+    <div style="position: fixed; bottom: 0; left: 0; width: 100%; height: 5px; background-color: #3355FF;">
+        <!-- Blue line will render here -->
+    </div>
+</apex:page>
