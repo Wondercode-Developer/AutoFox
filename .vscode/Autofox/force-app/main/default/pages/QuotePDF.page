@@ -1,0 +1,128 @@
+<apex:page sidebar="false" renderAs="pdf" Controller="QuotePDFController" showHeader="false" applyBodyTag="false" standardStylesheets="false">
+
+    <head>
+        <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+        <style>
+            body {
+                max-width: 700px;
+                font-family: 'Verdana', sans-serif;
+            }
+            p {
+                margin: 0; 
+                padding: 0;
+            }
+        </style>
+    </head>
+
+    <!-- Header Section -->
+    <div style="padding: 0px 20px; text-align: left;">
+        <div style="float: left; margin-top: 10px;">
+            <apex:image url="{!$Resource.Logo}" alt="Company Logo" style="width: 250px;" />
+        </div>
+        <div style="text-align: right; font-size: 9pt; color: #666; line-height: 1.2; float: right; margin-top: 10px;">
+            <div>{!$Label.CompanyStreet}</div>
+            <div>{!$Label.CompanyStreet2line}</div>
+            <div><strong>Tel.</strong> {!$Label.CompanyTel}</div>
+            <div><strong>Fax.</strong> {!$Label.CompanyFax}</div>
+            <div>{!$Label.CompanyEmail}</div>
+            <div>{!$Label.CompanyInfoWebsite}</div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+
+    <!-- Recipient Address Section -->
+    <div style="padding: 20px 20px 0 20px; font-size: 10pt; line-height: 1.3;">
+        {!primaryContact.Salutation}<br/>
+        {!primaryContact.Name}<br/>
+        {!opportunityRecord.Account.Name}<br/>
+        {!opportunityRecord.Account.BillingStreet}<br/>
+        {!opportunityRecord.Account.Billingpostalcode} {!opportunityRecord.Account.BillingCity}<br/>
+    </div>
+
+    <!-- Offer Number Section -->
+    <div style="text-align: right; padding: 10px 20px; font-size: 10pt;">
+        {!$Label.QuoteNumber} {!quoteRecord.QuoteNumberCustom__c} / <span>{!formattedDate}</span>
+    </div>
+
+    <!-- Salutation -->
+    <div style="padding: 10px 20px; font-size: 10pt;">
+        {!primaryContact.SalutationFormula__c} {!primaryContact.Salutation} {!primaryContact.LastName}!
+    </div>
+
+    <!-- Main Product Section -->
+    <div style="padding: 10px 20px; font-size: 10pt; line-height: 1.4;">
+        <p>{!$Label.EnquiryMessage}</p>
+        
+        <!-- Display List of Main Products -->
+        <div>
+            <p style="font-weight: bold; line-height: 1.4;">Main Products</p>
+            <apex:repeat value="{!mainProducts}" var="mainProduct">
+                <div style="display: table; width: 100%; padding: 10px 0px;">
+                    <!-- Product Image -->
+                    <apex:outputPanel rendered="{!showImage}">
+                        <div style="display: table-cell; width: 15%; vertical-align: top;">
+                            <apex:image url="/sfc/servlet.shepherd/version/download/{!productImageMap[mainProduct.Product2Id].LatestPublishedVersionId}" 
+                                        alt="{!mainProduct.Product2.Name}" style="width: 120%; margin-left: -30px;" />
+                        </div>
+                    </apex:outputPanel>
+                    <!-- Product Description -->
+                    <div style="display: table-cell; margin-left: -10px; vertical-align: top; text-align: justify;">
+                        <apex:outputText style="white-space: pre" escape="false" value="{!mainProduct.Product2.QTE_ProductDescription__c}" />
+                    </div>
+                </div>
+            </apex:repeat>
+        </div>
+    </div>
+
+    <!-- Accessory Product Section -->
+    <div style="padding: 10px 20px; font-size: 10pt; line-height: 1.4;">
+        <p style="font-weight: bold; line-height: 1.4;">Accessories</p>
+        <apex:repeat value="{!accessoryProducts}" var="item2">
+            <div style="display: table; width: 100%; padding: 10px 0px;">
+                <div style="display: table-cell; width: 20%;">{!item2.Product2.ProductCode}</div>
+                <div style="display: table-cell; width: 60%;">{!item2.Product2.Name}</div>
+                <div style="display: table-cell; width: 20%; text-align: right; white-space: nowrap;">
+                    <apex:outputField value="{!item2.TotalPrice}"/>
+                </div>
+            </div>
+        </apex:repeat>
+    </div>
+
+    <!-- Delivery and Payment Information -->
+    <table style="width: 100%; font-family: Arial, sans-serif; font-size: 10pt; line-height: 1.4;">
+        <tr>
+            <td style="font-weight: bold; width: 30%;">{!$Label.Delivery}</td>
+            <td>{!opportunityRecord.Delivery__c}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">{!$Label.Payment}</td>
+            <td>{!opportunityRecord.Payment__c}</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">{!$Label.Preise}</td>
+            <td><apex:outputText style="white-space: pre" escape="false" value="{!opportunityRecord.PricesQuoteText__c}" /></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">{!$Label.QuoteEndDate}</td>
+            <td>{!TEXT(DAY(quoteRecord.ExpirationDate))}.{!TEXT(MONTH(quoteRecord.ExpirationDate))}.{!TEXT(YEAR(quoteRecord.ExpirationDate))}</td>
+        </tr>
+    </table>
+
+    <!-- Contact Section -->
+    <div style="font-size: 10pt; line-height: 1.3;">
+        <p>{!$Label.EndNote}</p>
+        <p>{!$Label.Greetings}</p>
+        <p>{!loggedInUser.title} {!loggedInUser.FirstName} {!loggedInUser.LastName}<br/>
+            <a href="mailto:{!loggedInUser.Email}">{!loggedInUser.Email}</a>
+        </p>
+    </div>
+
+    <!-- Footer Note Section -->
+    <div style="font-size: 8pt; text-align: justify; line-height: 1.4;">
+        <p><i>{!$Label.Disclaimer1}</i></p>
+        <p><i>{!$Label.Disclaimer2}</i></p>
+    </div>
+
+    <!-- Footer Blue Line -->
+    <div style="position: fixed; bottom: 0; left: 0; width: 100%; height: 5px; background-color: #3355FF;"></div>
+</apex:page>
